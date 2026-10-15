@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Network Check</title>
+  <meta name="description" content="See what the internet knows about your connection, test reachability and speed, and inspect every raw response.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='%232f6fdf'/><path d='M8 18a11 11 0 0 1 16 0M11 21.5a6.5 6.5 0 0 1 10 0' stroke='white' stroke-width='2.4' fill='none' stroke-linecap='round'/><circle cx='16' cy='25' r='2' fill='white'/></svg>">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand">
+        <span class="brand-dot" aria-hidden="true"></span>
+        <div>
+          <h1>Network Check</h1>
+          <p class="muted small">Everything runs in your browser. Nothing is stored.</p>
+        </div>
+      </div>
+      <div class="actions">
+        <button id="btn-rerun" class="btn" type="button">Run again</button>
+        <button id="btn-export" class="btn" type="button">Export JSON</button>
+        <button id="btn-theme" class="btn btn-icon" type="button" aria-label="Toggle color theme" title="Toggle color theme">◐</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap layout">
+  <main>
+    <!-- Plain-language headline -->
+    <section id="summary" class="hero" aria-live="polite">
+      <p id="headline" class="headline">Checking your connection…</p>
+      <p id="subline" class="muted"></p>
+    </section>
+
+    <!-- At a glance -->
+    <section id="glance-sec" aria-labelledby="h-glance">
+      <h2 id="h-glance">What the internet sees</h2>
+      <div id="glance" class="grid cards"></div>
+    </section>
+
+    <!-- Signals worth a look -->
+    <section id="signals-sec" aria-labelledby="h-signals">
+      <h2 id="h-signals">Privacy &amp; consistency signals</h2>
+      <p class="muted small">Hints that a VPN, proxy, or leaky setup might be in play. They are clues, not proof.</p>
+      <ul id="signals" class="signals"></ul>
+    </section>
+
+    <!-- Connectivity -->
+    <section id="reachability" aria-labelledby="h-conn">
+      <div class="section-head">
+        <h2 id="h-conn">Reachability &amp; latency</h2>
+        <button id="btn-probe" class="btn btn-small" type="button">Re-test</button>
+      </div>
+      <p class="muted small">Each site is contacted once cold (includes DNS, TCP and TLS setup) and three more times warm. Times are full round trips measured by the browser.</p>
+      <div class="table-wrap">
+        <table class="probes">
+          <thead>
+            <tr><th>Service</th><th>Status</th><th class="num">Cold</th><th class="num">Warm (median)</th><th class="num">Jitter</th><th>Host</th></tr>
+          </thead>
+          <tbody id="probe-rows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Speed -->
+    <section id="speed-test" aria-labelledby="h-speed">
+      <div class="section-head">
+        <h2 id="h-speed">Speed test</h2>
+        <button id="btn-speed" class="btn btn-small btn-primary" type="button">Start speed test</button>
+      </div>
+      <p class="muted small">Downloads and uploads test files to Cloudflare's speed endpoint (about 36&nbsp;MB down and 8&nbsp;MB up). Runs only when you press start.</p>
+      <div id="speed" class="grid speed">
+        <div class="stat"><span class="stat-label">Download</span><span id="sp-down" class="stat-value">—</span></div>
+        <div class="stat"><span class="stat-label">Upload</span><span id="sp-up" class="stat-value">—</span></div>
+        <div class="stat"><span class="stat-label">Latency (idle)</span><span id="sp-lat" class="stat-value">—</span></div>
+        <div class="stat"><span class="stat-label">Server</span><span id="sp-colo" class="stat-value">—</span></div>
+      </div>
+      <p id="speed-status" class="muted small"></p>
+    </section>
+
+    <!-- DNS lookup tool -->
+    <section id="dns" aria-labelledby="h-dns">
+      <h2 id="h-dns">DNS lookup</h2>
+      <p class="muted small">Resolves a name over DNS-over-HTTPS with both Google and Cloudflare, so you can compare answers.</p>
+      <form id="dns-form" class="dns-form">
+        <input id="dns-name" type="text" value="example.com" spellcheck="false" autocomplete="off" aria-label="Hostname">
+        <select id="dns-type" aria-label="Record type">
+          <option>A</option><option>AAAA</option><option>CNAME</option><option>MX</option>
+          <option>TXT</option><option>NS</option><option>SOA</option><option>CAA</option>
+        </select>
+        <button class="btn btn-primary" type="submit">Look up</button>
+      </form>
+      <div id="dns-out" class="dns-out"></div>
+    </section>
+
+    <!-- Deep dive -->
+    <section id="deep-dive" aria-labelledby="h-deep">
+      <h2 id="h-deep">Deep dive</h2>
+      <p class="muted small">Every request this page made, with what the browser is allowed to show: status, timing, visible headers, and the raw body.</p>
+      <div id="deep" class="deep"></div>
+    </section>
+  </main>
+
+  <nav class="toc" aria-label="On this page">
+    <p class="toc-title">On this page</p>
+    <ol>
+      <li><a href="#summary">Summary</a></li>
+      <li><a href="#glance-sec">What the internet sees</a></li>
+      <li><a href="#signals-sec">Privacy signals</a></li>
+      <li><a href="#reachability">Reachability</a></li>
+      <li><a href="#speed-test">Speed test</a></li>
+      <li><a href="#dns">DNS lookup</a></li>
+      <li><a href="#deep-dive">Deep dive</a></li>
+    </ol>
+  </nav>
+  </div>
+
+  <footer class="wrap footer muted small">
+    Data from ipify, ipwho.is, ipapi.is, Cloudflare, and Google Public DNS. IP geolocation is approximate and providers often disagree.
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
