@@ -533,7 +533,7 @@
     if (env) {
       if (env.privacy.globalPrivacyControl) add('info', 'Global Privacy Control is on', 'Your browser asks sites not to sell or share your data.');
       if (env.privacy.webdriver) add('info', 'Automated browser', 'navigator.webdriver is true — this browser is being driven by software.');
-      if (location.protocol === 'file:') add('info', 'Opened as a local file', 'Everything still works, but serving over http://localhost gives the most consistent results.');
+      if (location.protocol === 'file:') add('info', 'Opened as a local file', 'Running straight from disk. Every check works the same as on a hosted copy.');
     }
 
     if (!out.length) out.push(el('li', { class: 'signal' }, el('span', { class: 'dot pending' }), el('div', { class: 'muted' }, 'Gathering signals…')));
