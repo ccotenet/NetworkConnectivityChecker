@@ -18,13 +18,15 @@ A small, static dashboard that shows what the internet can see about your connec
 
 ## Run locally
 
-Opening `index.html` directly works. Serving it over localhost gives the most consistent results:
+It's a flat site: double-click `index.html` and it runs straight from disk. No Python, Node or other runtime is needed.
 
-```bash
-python -m http.server 8765
+If you'd rather serve it over `http://localhost`, there's an optional zero-dependency PowerShell server:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File serve.ps1
 ```
 
-Then browse to http://localhost:8765.
+Then browse to http://localhost:8765. Any other static server works too.
 
 ## Deploy
 
